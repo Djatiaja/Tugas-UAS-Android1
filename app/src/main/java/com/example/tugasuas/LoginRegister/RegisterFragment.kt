@@ -1,11 +1,22 @@
 package com.example.tugasuas.LoginRegister
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.example.tugasuas.LoginActivity
 import com.example.tugasuas.R
+import com.example.tugasuas.databinding.FragmentLoginBinding
+import com.example.tugasuas.databinding.FragmentRegisterBinding
+import com.example.tugasuas.model.User
+import com.example.tugasuas.network.ApiClient
+import com.example.tugasuas.network.ApiResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +32,9 @@ class RegisterFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var __binding: FragmentRegisterBinding
+    val binding get() = __binding!!
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +48,57 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register, container, false)
+        __binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        with(binding){
+            btnRegister.setOnClickListener {
+                // Retrieve input values
+                val nama = txtNama.text.toString()
+                val email = txtEmail.text.toString()
+                val password = txtPassword.text.toString()
+                val confirmPassword = txtConfirmPassword.text.toString()
+
+                // Validate input
+                if (nama.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+                    Toast.makeText(requireContext(), "Silakan isi semua kolom", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                if (password != confirmPassword) {
+                    Toast.makeText(requireContext(), "Password dan konfirmasi password tidak cocok", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                // Perform registration operation
+                performRegistration(nama, email, password)
+            }
+
+        }
+    }
+
+    fun performRegistration(nama: String, email: String, password: String) {
+        val user = User(nama = nama, email = email, password = password)
+        val api = ApiClient.getInstance()
+        api.postUser(user).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(p0: Call<ApiResponse>, p1: Response<ApiResponse>) {
+                val act = requireContext() as LoginActivity
+                act.viewpager.currentItem = 0
+
+                Toast.makeText(binding.root.context, "Berhasil Register", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(p0: Call<ApiResponse>, t: Throwable) {
+                Log.e("API Error", "Registrasi gagal: ${t.message}")
+                Toast.makeText(requireContext(), "Registrasi gagal: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
 
     companion object {
         /**

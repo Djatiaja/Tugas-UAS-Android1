@@ -33,15 +33,27 @@
         android:textSize="30sp"
         android:layout_marginTop="40dp"/>
 
-    <EditText
-        android:id="@+id/txtSearch"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:drawableLeft="@drawable/baseline_search_24"
-        android:hint="Search"
-        android:inputType="text"
-        android:padding="10dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/txtSearch"
+            android:layout_width="290dp"
+            android:layout_height="60dp"
+            android:drawableLeft="@drawable/baseline_search_24"
+            android:hint="Search"
+            android:inputType="text"
+            android:padding="10dp"
+           />
+        <android.widget.Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:background="@drawable/box"/>
+
+    </LinearLayout>
+
 
 
 </LinearLayout>

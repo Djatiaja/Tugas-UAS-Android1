@@ -1,11 +1,19 @@
 package com.example.tugasuas.LoginRegister
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.tugasuas.R
+import com.example.tugasuas.StoreActivity
+import com.example.tugasuas.databinding.FragmentBookmarkBinding
+import com.example.tugasuas.databinding.FragmentLoginBinding
+import com.example.tugasuas.model.User
+import com.example.tugasuas.network.ApiClient
+import com.example.tugasuas.sharePref.PrefManager
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +29,8 @@ class LoginFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var __binding: FragmentLoginBinding
+    val binding get() = __binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +44,73 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+        __binding = FragmentLoginBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        with(binding){
+
+
+            btnLogin.setOnClickListener {
+                // Validasi input
+                val email = txtEmail.text.toString()
+                val password = txtPassword.text.toString()
+                if (email.isEmpty() || password.isEmpty()) {
+                    // Tampilkan pesan kesalahan
+                    Toast.makeText(binding.root.context, "Silakan masukkan email dan password", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                // Lakukan operasi login (ini bisa berupa panggilan API atau pengecekan database)
+                performLogin("admincoy",email, password)
+            }
+        }
+    }
+    fun performLogin(nama:String,email:String, password:String){
+        val api = ApiClient.getInstance()
+        api.getAllUser().enqueue(object : retrofit2.Callback<List<User>>{
+            override fun onResponse(call: retrofit2.Call<List<User>>, response: retrofit2.Response<List<User>>) {
+                val data = response.body()
+                if (data != null) {
+                    for (user in data){
+                        if (user.email == email && user.password == password){
+                            val intent = Intent(binding.root.context, StoreActivity::class.java)
+
+                            val prefManager = PrefManager.getInstance(binding.root.context)
+                            prefManager.saveUser(
+                                User(
+                                    _id = "",
+                                    nama = user.nama,
+                                    email = user.nama,
+                                    password = user.nama
+
+                                )
+                            )
+
+                            startActivity(intent)
+                            requireActivity().finish()
+                            return
+                        }
+                    }
+                    Toast.makeText(binding.root.context, "Email atau password salah", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<List<User>>, t: Throwable) {
+                Toast.makeText(binding.root.context, "Gagal mengambil data", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+
+
+
+
+
     }
 
     companion object {

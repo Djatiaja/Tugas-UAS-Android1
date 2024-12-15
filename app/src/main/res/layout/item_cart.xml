@@ -2,85 +2,106 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
-    <ImageView
-        android:layout_width="104dp"
-        android:layout_height="83dp"
-        android:src="@drawable/baseline_chair_24"/>
+    >
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="205dp"
-        android:layout_height="wrap_content">
-        <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cart"
+        android:padding="10dp"
+        android:background="@drawable/box"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <!-- Add CheckBox here -->
+        <CheckBox
+            android:id="@+id/checkbox_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingVertical="5dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tumbas"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_marginStart="4dp"/>
-            <ImageView
-                android:id="@+id/delete_item"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/baseline_delete_outline_24"
-                android:layout_alignParentEnd="true"/>
+            android:layout_gravity="center_vertical"
+            android:padding="5dp"/>
 
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rp. 1.000.000"
-                android:textStyle="bold"
-                android:textColor="#B71C1C"
-                android:textSize="14sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="4dp"/>
-            <LinearLayout
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/image_holder"
+            android:layout_width="104dp"
+            android:layout_height="83dp"
+            android:src="@drawable/baseline_chair_24"/>
 
-                <android.widget.Button
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:text="-"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="205dp"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="5dp">
+
                 <TextView
+                    android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
+                    android:text="Tumbas"
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="4dp"/>
-                <android.widget.Button
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:text="+"/>
-            </LinearLayout>
+                    android:layout_marginStart="4dp"/>
 
+                <ImageView
+                    android:id="@+id/delete_item"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/baseline_delete_outline_24"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="180dp"
+                android:layout_height="40dp"
+                android:gravity="center">
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$ 80"
+                    android:textStyle="bold"
+                    android:textColor="#B71C1C"
+                    android:textSize="14sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="4dp"/>
 
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:orientation="horizontal">
 
+                    <android.widget.Button
+                        android:id="@+id/btnMinus"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:text="-"/>
 
+                    <TextView
+                        android:id="@+id/quantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"/>
 
+                    <android.widget.Button
+                        android:id="@+id/btnTambah"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:text="+"/>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
-
-
-
 </LinearLayout>

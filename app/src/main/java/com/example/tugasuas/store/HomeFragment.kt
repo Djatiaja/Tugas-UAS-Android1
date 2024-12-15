@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tugasuas.R
@@ -13,6 +14,7 @@ import com.example.tugasuas.adapter.AdapterItemCard
 import com.example.tugasuas.databinding.FragmentHomeBinding
 import com.example.tugasuas.model.Furniture
 import com.example.tugasuas.network.ApiClient
+import com.example.tugasuas.sharePref.PrefManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,22 +42,7 @@ class HomeFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        val client = ApiClient.getInstance()
-        val furnitures = client.getAllFurnitures()
 
-        furnitures.enqueue(object : Callback<List<Furniture>> {
-            override fun onResponse(p0: Call<List<Furniture>>, p1: Response<List<Furniture>>) {
-                with(binding){
-                    val aedapter = AdapterItemCard(p1.body()!!)
-                    rvHome.apply {
-                        adapter = aedapter
-                        layoutManager = GridLayoutManager(context, 2)
-                    }
-                }
-            }
-            override fun onFailure(p0: Call<List<Furniture>>, p1: Throwable) {
-            }
-        })
     }
 
     override fun onCreateView(
@@ -70,10 +57,24 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val client = ApiClient.getInstance()
+        val furnitures = client.getAllFurnitures()
+        val pref = PrefManager.getInstance(requireContext())
 
-
+        with(binding){
+            val aedapter = AdapterItemCard(pref.getData()){ id->
+                val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(id)
+                findNavController().navigate(action)
+            }
+            rvHome.apply {
+                adapter = aedapter
+                layoutManager = GridLayoutManager(context, 2)
+            }
+        }
 
     }
 

@@ -5,7 +5,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.tugasbookmark.database.database
+import com.example.tugasuas.Dao.CartDao
 import com.example.tugasuas.R
+import com.example.tugasuas.adapter.AdapterItemCard
+import com.example.tugasuas.adapter.AdapterItemCart
+import com.example.tugasuas.databinding.FragmentCartBinding
+import com.example.tugasuas.databinding.FragmentDetailBinding
+import com.example.tugasuas.sharePref.PrefManager
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.concurrent.Executor
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +39,13 @@ class CartFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var __binding: FragmentCartBinding
+    val binding get() = __binding!!
+    lateinit var cartDao:CartDao
+    lateinit var executor:ExecutorService
+    lateinit var prefManager:PrefManager
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +59,55 @@ class CartFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cart, container, false)
+        __binding = FragmentCartBinding.inflate(inflater, container, false)
+        val database= database.getDatabase(binding.root.context)
+        cartDao = database!!.cartDao()!!
+        executor = Executors.newSingleThreadExecutor()
+        prefManager = PrefManager.getInstance(binding.root.context)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        refresh()
+
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun refresh(){
+        GlobalScope.launch(Dispatchers.IO) {
+            val dataInfo = prefManager.getData().filter { item ->
+                cartDao.getCart(item._id) != null
+            }
+            val dataCart = cartDao.getALlCart()
+            withContext(Dispatchers.Main) {
+                val padapter = AdapterItemCart(dataCart,dataInfo)
+                with(binding){
+                    rvCart.apply {
+                        adapter = padapter
+                        layoutManager= LinearLayoutManager(binding.root.context)
+                    }
+                    checkoutbtn.setOnClickListener(){
+                        checkout()
+                    }
+                }
+            }
+        }
+
+    }
+
+    fun checkout(){
+        executor.execute(){
+            val data = cartDao.getALlCartCheckout()
+            data.forEach {
+                if (it.isCheckout){
+                    cartDao.update(it.apply {
+                        isPurchase= true
+                    })
+                }
+            }
+            refresh()
+        }
     }
 
     companion object {

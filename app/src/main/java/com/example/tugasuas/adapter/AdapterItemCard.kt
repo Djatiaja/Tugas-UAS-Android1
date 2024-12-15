@@ -2,30 +2,39 @@ package com.example.tugasuas.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tugasbookmark.database.database
 import com.example.tugasuas.Dao.BookmarkDao
+import com.example.tugasuas.Dao.CartDao
 import com.example.tugasuas.R
 import com.example.tugasuas.databinding.ItemCardBinding
 import com.example.tugasuas.model.Bookmark
+import com.example.tugasuas.model.Cart
 import com.example.tugasuas.model.Furniture
+import com.example.tugasuas.store.HomeFragment
+import com.example.tugasuas.store.HomeFragmentDirections
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class AdapterItemCard(private val listFurniture: List<Furniture>): RecyclerView.Adapter<AdapterItemCard.ItemHolder>() {
+class AdapterItemCard(private val listFurniture: List<Furniture>,
+                      private val navigateToDetail: (String) -> Unit // Lambda for navigation
+    ): RecyclerView.Adapter<AdapterItemCard.ItemHolder>() {
     inner class ItemHolder(
         private var binding: ItemCardBinding,
 
 
     ):RecyclerView.ViewHolder(binding.root){
-        var bookmarkDao: BookmarkDao;
+        var bookmarkDao: BookmarkDao
         var executorService: ExecutorService
+        var cartDao:CartDao
 
         init {
             executorService = Executors.newSingleThreadExecutor()
             val database = database.getDatabase(binding.root.context)
             bookmarkDao =database!!.bookmarkDao()!!
+            cartDao = database!!.cartDao()!!
         }
 
         fun bind(data:Furniture){
@@ -43,15 +52,37 @@ class AdapterItemCard(private val listFurniture: List<Furniture>): RecyclerView.
 
             with(binding){
                 val imageUrl = data.image
+                title.text = data.name
+                description.text = data.description
+                price.text = "$"+data.price.toString()
 
                 Glide.with(binding.root.context)
                     .load(imageUrl)
                     .into(binding.imageHolder)
 
-
                 bookmark.setOnClickListener(){
                     bookmarking(data._id)
                 }
+
+                title.setOnClickListener(){
+                    navigateToDetail(data._id)
+                }
+
+                btnAddToCart.setOnClickListener(){
+                    addToCart(data)
+                }
+            }
+
+
+        }
+
+        fun addToCart(furniture: Furniture){
+            executorService.execute(){
+                cartDao.insert(Cart(
+                    key = furniture._id,
+                    quantity = 1,
+                    isCheckout = false
+                ))
             }
         }
 

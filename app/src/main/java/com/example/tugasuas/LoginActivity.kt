@@ -1,5 +1,6 @@
 package com.example.tugasuas
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import com.example.tugasuas.adapter.LoginRegisterPagerAdapter
 import com.example.tugasuas.databinding.ActivityLoginBinding
 import com.example.tugasuas.databinding.ActivityStoreBinding
 import com.example.tugasuas.model.Furniture
+import com.example.tugasuas.sharePref.PrefManager
 import com.google.android.material.tabs.TabLayoutMediator
 
 class LoginActivity : AppCompatActivity() {
@@ -30,6 +32,13 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val prefManager = PrefManager.getInstance(this)
+
+        if (prefManager.getUser()?.equals(null) == true){
+            val intent = Intent(this@LoginActivity, StoreActivity::class.java)
+            startActivity(intent)
+        }
 
         val LoginRegisterPagerAdapter = LoginRegisterPagerAdapter(this@LoginActivity)
 

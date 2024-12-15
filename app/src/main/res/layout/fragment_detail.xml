@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    tools:context=".store.DetailFragment"
+    android:padding="16dp"
+    android:orientation="vertical">
     <RelativeLayout
         android:layout_alignParentTop="true"
         android:id="@+id/navbar_holder"
@@ -11,13 +13,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <ImageView
-            android:id="@+id/imgLeft"
+            android:id="@+id/left"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/baseline_keyboard_arrow_left_24"
             android:layout_alignParentLeft="true"/>
 
         <ImageView
+            android:id="@+id/bookmark"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/baseline_bookmark_border_24"
@@ -105,5 +108,4 @@
         android:drawableStart="@drawable/baseline_shopping_cart_24"
         android:layout_marginBottom="10dp"
         />
-
 </RelativeLayout>
