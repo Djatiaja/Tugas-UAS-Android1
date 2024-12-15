@@ -113,11 +113,13 @@ class DetailFragment : Fragment() {
     }
 
     fun addToCart(furniture: Furniture, quantity:Int){
+        val prefManager = PrefManager.getInstance(binding.root.context)
         executor.execute(){
             cartDao.insert(Cart(
                 key = furniture._id,
                 quantity = quantity,
-                isCheckout = false
+                isCheckout = false,
+                userID = prefManager.getUser()!!._id!!
             ))
         }
     }

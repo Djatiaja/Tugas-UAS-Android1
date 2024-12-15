@@ -20,6 +20,7 @@ data class Cart(
     @ColumnInfo(name = "isCheckout")
     var isCheckout:Boolean,
 
-    var isPurchase:Boolean = false
+    var isPurchase:Boolean = false,
 
+    var userID:String
 )

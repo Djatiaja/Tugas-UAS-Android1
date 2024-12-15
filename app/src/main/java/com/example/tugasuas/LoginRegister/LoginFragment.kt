@@ -83,7 +83,7 @@ class LoginFragment : Fragment() {
                             val prefManager = PrefManager.getInstance(binding.root.context)
                             prefManager.saveUser(
                                 User(
-                                    _id = "",
+                                    _id = user._id,
                                     nama = user.nama,
                                     email = user.nama,
                                     password = user.nama

@@ -79,7 +79,7 @@ class CartFragment : Fragment() {
             val dataInfo = prefManager.getData().filter { item ->
                 cartDao.getCart(item._id) != null
             }
-            val dataCart = cartDao.getALlCart()
+            val dataCart = cartDao.getALlCart(prefManager.getUser()!!._id!!)
             withContext(Dispatchers.Main) {
                 val padapter = AdapterItemCart(dataCart,dataInfo)
                 with(binding){
@@ -98,7 +98,7 @@ class CartFragment : Fragment() {
 
     fun checkout(){
         executor.execute(){
-            val data = cartDao.getALlCartCheckout()
+            val data = cartDao.getALlCartCheckout(prefManager.getUser()!!._id!!)
             data.forEach {
                 if (it.isCheckout){
                     cartDao.update(it.apply {

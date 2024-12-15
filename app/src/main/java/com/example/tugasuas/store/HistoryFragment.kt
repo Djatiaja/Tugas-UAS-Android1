@@ -73,7 +73,7 @@ class HistoryFragment : Fragment() {
     fun refresh(){
         val prefManager = PrefManager.getInstance(binding.root.context)
         GlobalScope.launch(Dispatchers.IO) {
-            val dataCart = cartDao.getALlPurchase()
+            val dataCart = cartDao.getALlPurchase(prefManager.getUser()!!._id!!)
             val dataFurniture = prefManager.getData()
 
             val aedapter = AdapterItemHistory(dataCart, dataFurniture)

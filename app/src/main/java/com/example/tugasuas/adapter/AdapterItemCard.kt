@@ -13,6 +13,7 @@ import com.example.tugasuas.databinding.ItemCardBinding
 import com.example.tugasuas.model.Bookmark
 import com.example.tugasuas.model.Cart
 import com.example.tugasuas.model.Furniture
+import com.example.tugasuas.sharePref.PrefManager
 import com.example.tugasuas.store.HomeFragment
 import com.example.tugasuas.store.HomeFragmentDirections
 import java.util.concurrent.ExecutorService
@@ -77,11 +78,14 @@ class AdapterItemCard(private val listFurniture: List<Furniture>,
         }
 
         fun addToCart(furniture: Furniture){
+            val prefManager = PrefManager.getInstance(binding.root.context)
+
             executorService.execute(){
                 cartDao.insert(Cart(
                     key = furniture._id,
                     quantity = 1,
-                    isCheckout = false
+                    isCheckout = false,
+                    userID = prefManager.getUser()!!._id!!
                 ))
             }
         }

@@ -20,15 +20,15 @@ interface CartDao {
     @Delete
     fun delete(cart: Cart)
 
-    @Query("SELECT * FROM carts WHERE `key`= :pkey LIMIT 1")
+    @Query("SELECT * FROM carts WHERE `key`= :pkey  LIMIT 1")
     fun getCart(pkey:String): Cart?
 
-    @Query("SELECT * FROM carts  WHERE isCheckout = 0")
-    fun getALlCart():List<Cart>
+    @Query("SELECT * FROM carts  WHERE isCheckout = 0 AND userID= :uid ")
+    fun getALlCart(uid:String):List<Cart>
 
-    @Query("SELECT * FROM carts  WHERE isPurchase = 1")
-    fun getALlPurchase():List<Cart>
+    @Query("SELECT * FROM carts  WHERE isPurchase = 1  AND userID= :uid")
+    fun getALlPurchase(uid:String):List<Cart>
 
-    @Query("SELECT * FROM carts WHERE isCheckout = 1")
-    fun getALlCartCheckout():List<Cart>
+    @Query("SELECT * FROM carts WHERE isCheckout = 1  AND userID= :uid")
+    fun getALlCartCheckout(uid:String):List<Cart>
 }
