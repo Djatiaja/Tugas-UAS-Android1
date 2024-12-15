@@ -61,12 +61,12 @@ class HistoryFragment : Fragment() {
         val database= database.getDatabase(binding.root.context)
         cartDao = database!!.cartDao()!!
         executor = Executors.newSingleThreadExecutor()
+        refresh()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        refresh()
     }
 
     @OptIn(DelicateCoroutinesApi::class)

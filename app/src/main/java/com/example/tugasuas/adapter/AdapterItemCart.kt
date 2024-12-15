@@ -41,14 +41,14 @@ class AdapterItemCart(private val listCart:List<Cart>, private val listFurniture
                     val quantity = binding.quantity.text.toString().toInt()
                     if (quantity > 1){
                         binding.quantity.text = (quantity - 1).toString()
-                        refreshPrice(furniture)
+                        refreshPrice(furniture, data)
                     }
                 }
                 btnTambah.setOnClickListener(){
                     val quantity = binding.quantity.text.toString().toInt()
                     if (quantity < furniture.quantity){
                         binding.quantity.text = (quantity + 1).toString()
-                        refreshPrice(furniture)
+                        refreshPrice(furniture,data)
                     }
                 }
                 deleteItem.setOnClickListener(){
@@ -83,9 +83,15 @@ class AdapterItemCart(private val listCart:List<Cart>, private val listFurniture
             binding.deleteItem.setBackgroundResource(R.drawable.baseline_delete_24)
         }
 
-        fun refreshPrice(furniture: Furniture){
-            val quantity = binding.quantity.text.toString().toInt()
-            binding.price.text = "$ " +(furniture.price * quantity).toString()
+        fun refreshPrice(furniture: Furniture, data: Cart){
+            val varquantity = binding.quantity.text.toString().toInt()
+            binding.price.text = "$ " +(furniture.price * varquantity).toString()
+
+            executorService.execute(){
+                cartDao.update(data.apply {
+                    quantity =varquantity
+                })
+            }
 
         }
     }

@@ -29,7 +29,7 @@ class AdapterItemHistory(private val listCart:List<Cart>, private val listFurnit
             with(binding){
                 name.text = furniture.name
                 price.text = "Harga total : $"+ (furniture.price * data.quantity).toString()
-                quantity.text = "Jumlah barang :" + data.quantity.toString() +" buah"
+                quantity.text = "Jumlah barang :" + data.quantity.toString()
 
                 Glide.with(binding.root.context)
                     .load(furniture.image)

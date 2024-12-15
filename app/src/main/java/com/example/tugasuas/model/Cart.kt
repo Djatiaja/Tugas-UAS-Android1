@@ -15,7 +15,7 @@ data class Cart(
     val key: String,
 
     @ColumnInfo(name = "quantity")
-    val quantity:Int,
+    var quantity:Int,
 
     @ColumnInfo(name = "isCheckout")
     var isCheckout:Boolean,
