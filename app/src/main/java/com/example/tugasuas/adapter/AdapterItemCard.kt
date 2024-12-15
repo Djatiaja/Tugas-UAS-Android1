@@ -24,8 +24,6 @@ class AdapterItemCard(private val listFurniture: List<Furniture>,
     ): RecyclerView.Adapter<AdapterItemCard.ItemHolder>() {
     inner class ItemHolder(
         private var binding: ItemCardBinding,
-
-
     ):RecyclerView.ViewHolder(binding.root){
         var bookmarkDao: BookmarkDao
         var executorService: ExecutorService
@@ -39,9 +37,10 @@ class AdapterItemCard(private val listFurniture: List<Furniture>,
         }
 
         fun bind(data:Furniture){
+            val prefManager = PrefManager.getInstance(binding.root.context)
 
             executorService.execute(){
-                val bookmarkItem = bookmarkDao.getBookmark(data._id)
+                val bookmarkItem = bookmarkDao.getBookmark(data._id, prefManager.getUser()!!._id!!)
                     with(binding) {
                         if (bookmarkItem == null) {
                             bookmark.setBackgroundResource(R.drawable.baseline_bookmark_border_24)
@@ -92,9 +91,10 @@ class AdapterItemCard(private val listFurniture: List<Furniture>,
 
         fun bookmarking(pkey:String){
             executorService.execute {
-                val bookmarkItem = bookmarkDao.getBookmark(pkey)
+                val prefManager = PrefManager.getInstance(binding.root.context)
+                val bookmarkItem = bookmarkDao.getBookmark(pkey, uid = prefManager.getUser()!!._id!!)
                 if (bookmarkItem == null) {
-                    bookmarkDao.insert(Bookmark(key = pkey))
+                    bookmarkDao.insert(Bookmark(key = pkey, userID = prefManager.getUser()!!._id!!))
                 } else {
                     bookmarkDao.delete(bookmarkItem)
                 }
@@ -103,8 +103,9 @@ class AdapterItemCard(private val listFurniture: List<Furniture>,
         }
 
         fun refresh(pkey: String){
+            val prefManager = PrefManager.getInstance(binding.root.context)
             executorService.execute(){
-                val bookmarkItem = bookmarkDao.getBookmark(pkey)
+                val bookmarkItem = bookmarkDao.getBookmark(pkey, uid = prefManager.getUser()!!._id!!)
                 with(binding) {
                     if (bookmarkItem == null) {
                         bookmark.setBackgroundResource(R.drawable.baseline_bookmark_border_24)

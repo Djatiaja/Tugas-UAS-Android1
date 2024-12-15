@@ -78,7 +78,7 @@ class BookmarkFragment : Fragment() {
         val prefManager = PrefManager.getInstance(binding.root.context)
         GlobalScope.launch(Dispatchers.IO) {
             val data = prefManager.getData().filter { item ->
-                dao.getBookmark(item._id) != null
+                dao.getBookmark(item._id, prefManager.getUser()!!._id!!) != null
             }
 
             withContext(Dispatchers.Main) {

@@ -19,8 +19,8 @@ interface BookmarkDao {
     @Delete
     fun delete(Bookmark:Bookmark)
 
-    @Query("SELECT * FROM bookmarks WHERE keyVal= :pkey LIMIT 1")
-    fun getBookmark(pkey:String): Bookmark?
+    @Query("SELECT * FROM bookmarks WHERE keyVal= :pkey AND userID= :uid LIMIT 1")
+    fun getBookmark(pkey:String, uid:String): Bookmark?
 
     @Query("DELETE FROM bookmarks")
     fun nukeTable();

@@ -14,4 +14,6 @@ data class Bookmark(
     @ColumnInfo(name = "keyVal")
     @NotNull
     val key:String,
+
+    val userID:String
 )

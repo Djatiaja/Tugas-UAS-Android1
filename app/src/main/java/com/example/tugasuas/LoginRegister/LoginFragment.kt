@@ -66,11 +66,11 @@ class LoginFragment : Fragment() {
                 }
 
                 // Lakukan operasi login (ini bisa berupa panggilan API atau pengecekan database)
-                performLogin("admincoy",email, password)
+                performLogin(email, password)
             }
         }
     }
-    fun performLogin(nama:String,email:String, password:String){
+    fun performLogin(email:String, password:String){
         val api = ApiClient.getInstance()
         api.getAllUser().enqueue(object : retrofit2.Callback<List<User>>{
             override fun onResponse(call: retrofit2.Call<List<User>>, response: retrofit2.Response<List<User>>) {
@@ -87,10 +87,9 @@ class LoginFragment : Fragment() {
                                     nama = user.nama,
                                     email = user.nama,
                                     password = user.nama
-
                                 )
                             )
-
+                            Toast.makeText(binding.root.context, "Berhasil login", Toast.LENGTH_SHORT).show()
                             startActivity(intent)
                             requireActivity().finish()
                             return

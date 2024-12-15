@@ -87,6 +87,7 @@ class DetailFragment : Fragment() {
                     txtQty.text = qty.toString()
                 }
             }
+
             btnPlus.setOnClickListener(){
                 var qty = txtQty.text.toString().toInt()
                 if (qty < data.quantity){
@@ -98,7 +99,6 @@ class DetailFragment : Fragment() {
             Glide.with(binding.root.context)
                 .load(data.image)
                 .into(binding.imageHolder)
-
 
 
             bookmark.setOnClickListener(){
@@ -126,9 +126,11 @@ class DetailFragment : Fragment() {
 
     fun bookmarking(pkey:String){
         executor.execute {
-            val bookmarkItem = bookmarkDao.getBookmark(pkey)
+            val prefManager = PrefManager.getInstance(binding.root.context)
+
+            val bookmarkItem = bookmarkDao.getBookmark(pkey, prefManager.getUser()!!._id!!)
             if (bookmarkItem == null) {
-                bookmarkDao.insert(Bookmark(key = pkey))
+                bookmarkDao.insert(Bookmark(key = pkey, userID = prefManager.getUser()!!._id!!))
             } else {
                 bookmarkDao.delete(bookmarkItem)
             }
@@ -136,8 +138,10 @@ class DetailFragment : Fragment() {
         refresh(pkey)
     }
     fun refresh(pkey: String){
+        val prefManager = PrefManager.getInstance(binding.root.context)
+
         executor.execute(){
-            val bookmarkItem = bookmarkDao.getBookmark(pkey)
+            val bookmarkItem = bookmarkDao.getBookmark(pkey, prefManager.getUser()!!._id!!)
             with(binding) {
                 if (bookmarkItem == null) {
                     bookmark.setBackgroundResource(R.drawable.baseline_bookmark_border_24)

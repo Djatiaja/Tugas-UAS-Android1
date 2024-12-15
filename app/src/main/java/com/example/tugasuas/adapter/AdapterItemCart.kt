@@ -51,6 +51,7 @@ class AdapterItemCart(private val listCart:List<Cart>, private val listFurniture
                         refreshPrice(furniture,data)
                     }
                 }
+
                 deleteItem.setOnClickListener(){
                     deleteCart(data, position)
                 }

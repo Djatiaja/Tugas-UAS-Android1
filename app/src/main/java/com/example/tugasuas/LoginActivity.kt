@@ -35,9 +35,10 @@ class LoginActivity : AppCompatActivity() {
 
         val prefManager = PrefManager.getInstance(this)
 
-        if (prefManager.getUser()?.equals(null) == true){
+        if (prefManager.getUser()?.equals(null) == false){
             val intent = Intent(this@LoginActivity, StoreActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val LoginRegisterPagerAdapter = LoginRegisterPagerAdapter(this@LoginActivity)

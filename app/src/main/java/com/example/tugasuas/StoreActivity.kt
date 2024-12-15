@@ -44,7 +44,7 @@ class StoreActivity : AppCompatActivity() {
         furnitures.enqueue(object : Callback<List<Furniture>> {
             override fun onResponse(p0: Call<List<Furniture>>, p1: Response<List<Furniture>>) {
                 prefManager.saveData(p1.body()!!)
-                Toast.makeText(binding.root.context, prefManager.getData().toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@StoreActivity, "Berhasil Fetch data", Toast.LENGTH_SHORT).show()
             }
             override fun onFailure(p0: Call<List<Furniture>>, p1: Throwable) {
                 Toast.makeText(binding.root.context, "Gagal fetch data", Toast.LENGTH_SHORT).show()
